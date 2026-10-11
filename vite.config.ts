@@ -27,6 +27,10 @@ export default defineConfig({
   server: {
     port: 1420,
     strictPort: true,
+    watch: {
+      // don't watch the Rust build output (Windows locks the .exe files while compiling)
+      ignored: ["**/src-tauri/**"],
+    },
   },
   envPrefix: ["VITE_", "TAURI_", "CURSES_"],
   resolve: {

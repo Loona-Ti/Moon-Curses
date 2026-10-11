@@ -172,6 +172,112 @@ const Speechly: FC = () => {
   </>
 }
 
+const whisperLanguages = [
+  { label: "Auto-detect", value: "auto" },
+  { label: "English", value: "en" },
+  { label: "French", value: "fr" },
+  { label: "Dutch", value: "nl" },
+  { label: "German", value: "de" },
+  { label: "Spanish", value: "es" },
+  { label: "Italian", value: "it" },
+  { label: "Portuguese", value: "pt" },
+  { label: "Polish", value: "pl" },
+  { label: "Russian", value: "ru" },
+  { label: "Turkish", value: "tr" },
+  { label: "Japanese", value: "ja" },
+  { label: "Korean", value: "ko" },
+  { label: "Chinese", value: "zh" },
+];
+
+const whisperModels = [
+  { label: "Tiny (fastest, least accurate)", value: "tiny" },
+  { label: "Small (recommended)", value: "small" },
+];
+
+const voskLanguages = [
+  { label: "English", value: "en-us" },
+  { label: "French", value: "fr" },
+  { label: "Dutch", value: "nl" },
+  { label: "German", value: "de" },
+  { label: "Spanish", value: "es" },
+  { label: "Italian", value: "it" },
+  { label: "Portuguese", value: "pt" },
+  { label: "Russian", value: "ru" },
+  { label: "Turkish", value: "tr" },
+  { label: "Japanese", value: "ja" },
+  { label: "Korean", value: "ko" },
+  { label: "Polish", value: "pl" },
+  { label: "Ukrainian", value: "uk" },
+  { label: "Chinese", value: "cn" },
+];
+
+const moonshineLanguages = [
+  { label: "English", value: "en" },
+  { label: "German", value: "de" },
+  { label: "Spanish", value: "es" },
+  { label: "Japanese", value: "ja" },
+  { label: "Chinese", value: "zh" },
+  { label: "Arabic", value: "ar" },
+  { label: "Vietnamese", value: "vi" },
+  { label: "Korean", value: "ko" },
+  { label: "Ukrainian", value: "uk" },
+];
+
+const nemotronLanguages = [
+  { label: "Auto-detect", value: "auto" },
+  { label: "English", value: "en-US" },
+  { label: "French", value: "fr-FR" },
+  { label: "German", value: "de-DE" },
+  { label: "Spanish", value: "es-ES" },
+  { label: "Italian", value: "it-IT" },
+  { label: "Portuguese", value: "pt-BR" },
+  { label: "Japanese", value: "ja-JP" },
+  { label: "Korean", value: "ko-KR" },
+];
+
+/** Settings shared by every local engine: Curses starts the speech server itself. */
+const LocalServerSettings: FC = () => {
+  const {t} = useTranslation();
+  const pr = useSnapshot(window.ApiServer.state.services.stt.data.localServer);
+  const up = <K extends keyof STT_State["localServer"]>(key: K, v: STT_State["localServer"][K]) => window.ApiServer.state.services.stt.data.localServer[key] = v;
+
+  return <>
+    <InputCheckbox label="stt.local_manage" onChange={e => up("manage", e)} value={pr.manage} />
+    <InputText label="stt.local_port" value={pr.port} onChange={e => up("port", e.target.value)} />
+    <span className="text-base-content/60 text-xs">{t(pr.manage ? 'stt.local_notice_managed' : 'stt.local_notice_manual')}</span>
+  </>
+}
+
+type LocalEngineKey = "whisper" | "parakeet" | "nemotron" | "vosk" | "moonshine";
+
+const LocalEngine: FC<{
+  engine: LocalEngineKey,
+  title: string,
+  notice: string,
+  languages?: { label: string, value: string }[],
+  models?: { label: string, value: string }[],
+}> = ({ engine, title, notice, languages, models }) => {
+  const {t} = useTranslation();
+  const pr = useSnapshot(window.ApiServer.state.services.stt.data[engine]) as any;
+  const up = (key: string, v: any) => (window.ApiServer.state.services.stt.data[engine] as any)[key] = v;
+
+  return <>
+    <Inspector.SubHeader>{t(title)}</Inspector.SubHeader>
+    <InputWebAudioInput value={pr.device} onChange={e => up("device", e)} label="common.field_input_device"/>
+    {models && <InputSelect options={models} label="stt.local_model" value={pr.model} onValueChange={e => up("model", e)} />}
+    {languages && <InputSelect options={languages} label="common.field_language" value={pr.language} onValueChange={e => up("language", e)} />}
+    <InputCheckbox label="stt.field_enable_interim_results" onChange={e => up("interim", e)} value={pr.interim} />
+    <LocalServerSettings />
+    <span className="text-base-content/60 text-xs">{t(notice)}</span>
+  </>
+}
+
+const Whisper: FC = () => <LocalEngine engine="whisper" title="stt.whisper_title" notice="stt.whisper_notice" models={whisperModels} languages={whisperLanguages} />;
+const Parakeet: FC = () => <LocalEngine engine="parakeet" title="stt.parakeet_title" notice="stt.parakeet_notice" />;
+const Nemotron: FC = () => <LocalEngine engine="nemotron" title="stt.nemotron_title" notice="stt.nemotron_notice" languages={nemotronLanguages} />;
+const Vosk: FC = () => <LocalEngine engine="vosk" title="stt.vosk_title" notice="stt.vosk_notice" languages={voskLanguages} />;
+const Moonshine: FC = () => <LocalEngine engine="moonshine" title="stt.moonshine_title" notice="stt.moonshine_notice" languages={moonshineLanguages} />;
+
 const WordsReplacementModal: FC = () => {
   const {t} = useTranslation();
   const data = useSnapshot(window.ApiServer.state.services.stt);
@@ -219,13 +325,23 @@ const Inspector_STT: FC = () => {
           { label: "Browser", value: STT_Backends.browser },
           { label: "Azure", value: STT_Backends.azure },
           { label: "Deepgram", value: STT_Backends.deepgram },
-          { label: "Speechly", value: STT_Backends.speechly }
+          { label: "Speechly", value: STT_Backends.speechly },
+          { label: "Whisper (local)", value: STT_Backends.whisper },
+          { label: "Parakeet TDT 0.6B v3 (local)", value: STT_Backends.parakeet },
+          { label: "Nemotron Speech Streaming (local)", value: STT_Backends.nemotron },
+          { label: "Vosk (local)", value: STT_Backends.vosk },
+          { label: "Moonshine (local)", value: STT_Backends.moonshine }
         ]} label="common.field_service" value={data.data.backend} onValueChange={e => up("backend", e as STT_Backends)} />
 
         {data.data.backend === STT_Backends.browser && <Browser />}
         {data.data.backend === STT_Backends.azure && <Azure />}
         {data.data.backend === STT_Backends.deepgram && <Deepgram />}
         {data.data.backend === STT_Backends.speechly && <Speechly />}
+        {data.data.backend === STT_Backends.whisper && <Whisper />}
+        {data.data.backend === STT_Backends.parakeet && <Parakeet />}
+        {data.data.backend === STT_Backends.nemotron && <Nemotron />}
+        {data.data.backend === STT_Backends.vosk && <Vosk />}
+        {data.data.backend === STT_Backends.moonshine && <Moonshine />}
         {data.data.backend === STT_Backends.native && <Native />}
       </Inspector.Deactivatable>
 

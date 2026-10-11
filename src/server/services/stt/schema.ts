@@ -7,6 +7,11 @@ export enum STT_Backends {
   azure = "azure",
   deepgram = "deepgram",
   speechly = "speechly",
+  whisper = "whisper",
+  parakeet = "parakeet",
+  nemotron = "nemotron",
+  vosk = "vosk",
+  moonshine = "moonshine",
 }
 
 export const zodSTT_Backends = z.nativeEnum(STT_Backends);
@@ -49,7 +54,39 @@ export const Service_STT_Schema = z.object({
     punctuate: zSafe(z.coerce.boolean(), true),
     profanity: zSafe(z.coerce.boolean(), true),
     interim: zSafe(z.coerce.boolean(), true),
-  }).default({})
+  }).default({}),
+  // shared by every local engine: Curses starts/stops the speech server itself
+  localServer: z.object({
+    manage: zSafe(z.coerce.boolean(), true),
+    port: zSafe(z.coerce.string(), "8765"),
+  }).default({}),
+  whisper: z.object({
+    device: zSafe(z.coerce.string(), "default"),
+    // "auto" lets Whisper detect the spoken language
+    language: zSafe(z.coerce.string(), "auto"),
+    // tiny or small
+    model: zSafe(z.coerce.string(), "small"),
+    interim: zSafe(z.coerce.boolean(), true),
+  }).default({}),
+  parakeet: z.object({
+    device: zSafe(z.coerce.string(), "default"),
+    interim: zSafe(z.coerce.boolean(), true),
+  }).default({}),
+  nemotron: z.object({
+    device: zSafe(z.coerce.string(), "default"),
+    language: zSafe(z.coerce.string(), "auto"),
+    interim: zSafe(z.coerce.boolean(), true),
+  }).default({}),
+  vosk: z.object({
+    device: zSafe(z.coerce.string(), "default"),
+    language: zSafe(z.coerce.string(), "en-us"),
+    interim: zSafe(z.coerce.boolean(), true),
+  }).default({}),
+  moonshine: z.object({
+    device: zSafe(z.coerce.string(), "default"),
+    language: zSafe(z.coerce.string(), "en"),
+    interim: zSafe(z.coerce.boolean(), true),
+  }).default({}),
 }).default({});
 
 export type STT_State = z.infer<typeof Service_STT_Schema>;

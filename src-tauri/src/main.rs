@@ -63,7 +63,7 @@ fn main() {
                 MessageBoxA(
                     None,
                     PCSTR(format!("Port {} is not available!", args.port).as_ptr()),
-                    s!("Curses error"),
+                    s!("Moon Curses error"),
                     MB_OK | MB_ICONWARNING,
                 );
             }
@@ -87,6 +87,7 @@ fn main() {
         .plugin(services::uberduck_tts::init())
         .plugin(services::keyboard::init())
         .plugin(services::uwu::init())
+        .plugin(services::stt_server::init())
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

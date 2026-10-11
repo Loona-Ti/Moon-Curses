@@ -5,6 +5,7 @@ pub mod windows_tts;
 pub mod uberduck_tts;
 pub mod keyboard;
 pub mod uwu;
+pub mod stt_server;
 // pub mod translate;
 
 pub struct AppConfiguration {
