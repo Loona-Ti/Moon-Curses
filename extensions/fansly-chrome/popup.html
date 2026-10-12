@@ -1,0 +1,31 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  body { width: 280px; margin: 0; padding: 14px; background: #313338; color: #DBDEE1; font: 13px system-ui, sans-serif; }
+  h1 { font-size: 15px; margin: 0 0 10px; color: #F5A9CF; }
+  .row { display: flex; align-items: center; justify-content: space-between; margin: 8px 0; gap: 8px; }
+  input[type=number] { width: 70px; background: #1E1F22; color: #DBDEE1; border: 1px solid #232428; border-radius: 6px; padding: 4px 6px; }
+  button { background: #F5A9CF; color: #2B1420; border: 0; border-radius: 6px; padding: 7px 10px; font-weight: 600; cursor: pointer; width: 100%; margin-top: 6px; }
+  button.alt { background: #232428; color: #DBDEE1; }
+  #status { font-weight: 600; }
+  .ok { color: #23A55A; } .bad { color: #F23F42; }
+  small { color: #949BA4; display: block; margin-top: 8px; }
+</style>
+</head>
+<body>
+  <h1>Moon Curses → Fansly</h1>
+  <div class="row"><span>Moon Curses</span><span id="status" class="bad">…</span></div>
+  <div class="row"><label for="enabled">Post to chat</label><input type="checkbox" id="enabled"></div>
+  <div class="row"><label for="autoSend">Press Enter automatically</label><input type="checkbox" id="autoSend"></div>
+  <div class="row"><label for="port">Curses port</label><input type="number" id="port"></div>
+  <div class="row"><label for="maxLen">Max characters per message</label><input type="number" id="maxLen"></div>
+  <div class="row"><label for="delayMs">Delay between messages (ms)</label><input type="number" id="delayMs"></div>
+  <button id="pick">Pick chat box (if it types in the wrong place)</button>
+  <button class="alt" id="reset">Forget picked chat box</button>
+  <button class="alt" id="test">Send test message</button>
+  <small>Works on fansly.com/creator/streaming and fansly.com/live/runalewdie while Moon Curses has Fansly turned on.</small>
+  <script src="popup.js"></script>
+</body>
+</html>

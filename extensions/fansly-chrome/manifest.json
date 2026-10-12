@@ -1,0 +1,17 @@
+{
+  "manifest_version": 3,
+  "name": "Moon Curses → Fansly",
+  "version": "1.0.0",
+  "description": "Sends the speech-to-text output of Moon Curses to your Fansly live chat.",
+  "permissions": ["storage", "tabs", "alarms"],
+  "host_permissions": ["https://fansly.com/*", "https://*.fansly.com/*", "http://127.0.0.1/*", "http://localhost/*"],
+  "background": { "service_worker": "background.js" },
+  "content_scripts": [
+    {
+      "matches": ["https://fansly.com/*", "https://*.fansly.com/*"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "action": { "default_title": "Moon Curses → Fansly", "default_popup": "popup.html" }
+}
