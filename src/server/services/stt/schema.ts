@@ -59,6 +59,9 @@ export const Service_STT_Schema = z.object({
   localServer: z.object({
     manage: zSafe(z.coerce.boolean(), true),
     port: zSafe(z.coerce.string(), "8765"),
+    // amplifies a quiet microphone before it is sent to the engine
+    micBoost: zSafe(z.coerce.boolean(), false),
+    micBoostLevel: zSafe(z.coerce.string(), "4"),
   }).default({}),
   whisper: z.object({
     device: zSafe(z.coerce.string(), "default"),

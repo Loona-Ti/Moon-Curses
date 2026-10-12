@@ -244,6 +244,13 @@ const LocalServerSettings: FC = () => {
   return <>
     <InputCheckbox label="stt.local_manage" onChange={e => up("manage", e)} value={pr.manage} />
     <InputText label="stt.local_port" value={pr.port} onChange={e => up("port", e.target.value)} />
+    <InputCheckbox label="stt.local_mic_boost" onChange={e => up("micBoost", e)} value={pr.micBoost} />
+    {pr.micBoost && <InputSelect label="stt.local_mic_boost_level" value={pr.micBoostLevel} onValueChange={e => up("micBoostLevel", e)} options={[
+      { label: "x2 (+6 dB)", value: "2" },
+      { label: "x4 (+12 dB)", value: "4" },
+      { label: "x8 (+18 dB)", value: "8" },
+    ]} />}
+    {pr.micBoost && <span className="text-base-content/60 text-xs">{t('stt.local_mic_boost_notice')}</span>}
     <span className="text-base-content/60 text-xs">{t(pr.manage ? 'stt.local_notice_managed' : 'stt.local_notice_manual')}</span>
   </>
 }

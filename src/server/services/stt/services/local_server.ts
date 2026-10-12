@@ -73,10 +73,27 @@ export abstract class STT_LocalServerService implements ISTTService {
     this.#context = undefined;
   }
 
-  #floatToPcm16(input: Float32Array): ArrayBuffer {
+  /** Current boost multiplier, read live so the toggle works while listening. */
+  #boostGain(): number {
+    const cfg = window.ApiServer.state.services.stt.data.localServer;
+    if (!cfg.micBoost)
+      return 1;
+    const g = parseFloat(cfg.micBoostLevel);
+    return g >= 1 && g <= 32 ? g : 4;
+  }
+
+  #floatToPcm16(input: Float32Array, gain = 1): ArrayBuffer {
     const out = new Int16Array(input.length);
+    const KNEE = 0.6;
     for (let i = 0; i < input.length; i++) {
-      const s = Math.max(-1, Math.min(1, input[i]));
+      let v = input[i] * gain;
+      if (gain > 1) {
+        // soft limiter: linear below the knee, smoothly squeezed towards +-1 above it
+        const a = Math.abs(v);
+        if (a > KNEE)
+          v = Math.sign(v) * (KNEE + (1 - KNEE) * Math.tanh((a - KNEE) / (1 - KNEE)));
+      }
+      const s = Math.max(-1, Math.min(1, v));
       out[i] = s < 0 ? s * 0x8000 : s * 0x7fff;
     }
     return out.buffer;
@@ -162,7 +179,8 @@ export abstract class STT_LocalServerService implements ISTTService {
         channelCount: 1,
         echoCancellation: false,
         noiseSuppression: true,
-        autoGainControl: true,
+        // with the boost on we want a predictable fixed gain, not the browser's automatic one
+        autoGainControl: !state.localServer.micBoost,
       }
     };
 
@@ -240,7 +258,7 @@ export abstract class STT_LocalServerService implements ISTTService {
         this.#processor.onaudioprocess = (ev) => {
           if (socket.readyState !== WebSocket.OPEN)
             return;
-          socket.send(this.#floatToPcm16(ev.inputBuffer.getChannelData(0)));
+          socket.send(this.#floatToPcm16(ev.inputBuffer.getChannelData(0), this.#boostGain()));
         };
         this.#source.connect(this.#processor);
         // the processor only runs while connected to a destination
