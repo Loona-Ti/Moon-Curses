@@ -1,7 +1,7 @@
 import { ServiceNetworkState } from "@/types";
 import { AnimatePresence, motion } from "framer-motion";
 import { FC, PropsWithChildren } from "react";
-import { SiDiscord, SiTwitch } from "react-icons/si";
+import { SiTwitch } from "react-icons/si";
 import { useSnapshot } from "valtio";
 import Tooltip from "./dropdown/Tooltip";
 
@@ -22,9 +22,6 @@ const StatusButton: FC<PropsWithChildren<{animKey: string, tooltip: string, onCl
 }
 
 const RecordingAlerts: FC = () => {
-  const { postEnable: discordPostEnable, postWithTwitchLive: discordPostWithTwitchLive } = useSnapshot(
-    window.ApiServer.state.services.discord.data
-  );
   const { chatPostEnable, chatEnable, chatPostLive } = useSnapshot(
     window.ApiServer.state.services.twitch.data
   );
@@ -34,8 +31,6 @@ const RecordingAlerts: FC = () => {
   const handleStopTwitch = () => {
     window.ApiServer.patchService("twitch", state => state.data.chatPostEnable = false)
   };
-  const handleStopDiscord = () => {
-    window.ApiServer.patchService("discord", state => state.data.postEnable = false)};
 
   const showTwitch =
     chatEnable &&
@@ -44,13 +39,10 @@ const RecordingAlerts: FC = () => {
     (chatPostLive ? twitchLiveStatus === ServiceNetworkState.connected : true);
 
 
-    
-    const showDiscord = discordPostEnable && (discordPostWithTwitchLive ? twitchLiveStatus === ServiceNetworkState.connected : true)
   return (
     <div className="flex space-x-2">
       <AnimatePresence>
         {showTwitch && <StatusButton key="twitch" tooltip="Twitch Chat integration" animKey="twitch" onClick={handleStopTwitch }><SiTwitch size={20} /></StatusButton>}
-        {showDiscord && <StatusButton key="discord" tooltip="Discord integration" animKey="discord" onClick={handleStopDiscord }><SiDiscord size={20} /></StatusButton>}
       </AnimatePresence>
     </div>
   );

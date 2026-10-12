@@ -1,7 +1,7 @@
 import classNames from "classnames";
 import { AnimatePresence, motion } from "framer-motion";
 import { ButtonHTMLAttributes, FC, memo, PropsWithChildren, ReactNode, useEffect, useMemo } from "react";
-import { RiAddFill, RiBrushFill, RiChatVoiceFill, RiFolderMusicFill, RiImageFill, RiMessage2Fill, RiSettings2Fill, RiStackFill, RiTranslate2, RiUserVoiceFill } from "react-icons/ri";
+import { RiAddFill, RiBrushFill, RiChatVoiceFill, RiFolderMusicFill, RiImageFill, RiMessage2Fill, RiSettings2Fill, RiStackFill, RiUserVoiceFill } from "react-icons/ri";
 import { TbArrowBarToLeft, TbArrowBarToRight, TbTextResize } from "react-icons/tb";
 import { useSnapshot } from "valtio";
 import { Services } from "../index";
@@ -12,7 +12,7 @@ import Dropdown from "./dropdown/Dropdown";
 import Tooltip from "./dropdown/Tooltip";
 import Inspector from "./inspector";
 import { MdExtension } from "react-icons/md";
-import { SiDiscord, SiObsstudio, SiTwitch } from "react-icons/si";
+import { SiObsstudio, SiTwitch } from "react-icons/si";
 import { useTranslation } from "react-i18next";
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -120,7 +120,6 @@ const Sidebar: FC = memo(() => {
 
   const sttState = useSnapshot(window.ApiServer.stt.serviceState);
   const ttsState = useSnapshot(window.ApiServer.tts.serviceState);
-  const translationState = useSnapshot(window.ApiServer.translation.serviceState);
 
   return <div className="flex h-full z-20">
     <div className="bg-base-200 flex-none overflow-y-scroll overflow-x-hidden scrollbar-hide">
@@ -134,13 +133,11 @@ const Sidebar: FC = memo(() => {
         </button>
         <SideBarButton status={sttState.status} tab={{ tab: Services.stt }} tooltip={t("stt.title")}><RiUserVoiceFill /></SideBarButton>
         <SideBarButton status={ttsState.status} tab={{ tab: Services.tts }} tooltip={t("tts.title")}><RiChatVoiceFill /></SideBarButton>
-        <SideBarButton status={translationState.status} tab={{ tab: Services.translation }} tooltip={t("transl.title")}><RiTranslate2 /></SideBarButton>
         <SideBarButton tab={{ tab: "settings" }} tooltip={t("settings.title")}><RiSettings2Fill /></SideBarButton>
         <SIdebarDivider expand={expand} icon={<MdExtension className="flex-none" size={14} />}>{t('main.section_integrations')}</SIdebarDivider>
         <div className={classNames("flex flex-col transition-spacing space-y-1", expand ? "pl-2" : "pl-0")}>
           <SideBarButton tab={{ tab: "obs" }} tooltip={t("obs.title")}><SiObsstudio /></SideBarButton>
           <SideBarButton tab={{ tab: Services.twitch }} tooltip={t("twitch.title")}><SiTwitch /></SideBarButton>
-          <SideBarButton tab={{ tab: Services.discord }} tooltip={t("discord.title")}><SiDiscord /></SideBarButton>
           <SideBarButton tab={{ tab: Services.vrc }} tooltip={t("vrc.title")}><RiMessage2Fill /></SideBarButton>
         </div>
         <SIdebarDivider expand={expand} icon={<RiBrushFill className="flex-none" size={14} />}>{t('main.section_elements')}</SIdebarDivider>

@@ -2,7 +2,7 @@ import { appWindow } from "@tauri-apps/api/window";
 import { exit } from '@tauri-apps/api/process';
 import classNames from "classnames";
 import { FC, HtmlHTMLAttributes, PropsWithChildren, ReactNode, useState } from "react";
-import { RiChatVoiceFill, RiFileListLine, RiMicFill, RiMicOffFill, RiPushpin2Fill, RiPushpinFill, RiStackFill, RiTranslate2, RiUserVoiceFill, RiVolumeMuteFill, RiVolumeUpFill } from "react-icons/ri";
+import { RiChatVoiceFill, RiFileListLine, RiMicFill, RiMicOffFill, RiPushpin2Fill, RiPushpinFill, RiStackFill, RiUserVoiceFill, RiVolumeMuteFill, RiVolumeUpFill } from "react-icons/ri";
 import { RxInput } from "react-icons/rx";
 import { VscChromeClose, VscChromeMaximize, VscChromeMinimize } from "react-icons/vsc";
 import { useSnapshot }         from "valtio";
@@ -62,12 +62,6 @@ const handleSwitchTTS = () => {
   else if (window.ApiServer.tts.serviceState.status === ServiceNetworkState.connected)
     window.ApiServer.tts.stop();
 }
-const handleSwitchTranslation = () => {
-  if (window.ApiServer.translation.serviceState.status === ServiceNetworkState.disconnected)
-    window.ApiServer.translation.start();
-  else if (window.ApiServer.translation.serviceState.status === ServiceNetworkState.connected)
-    window.ApiServer.translation.stop();
-}
 
 const ActionBar: FC = () => {
   return <div data-tauri-drag-region className="relative w-full py-1 flex items-center space-x-1 sm:space-x-2 px-2">
@@ -88,11 +82,9 @@ const AppActions: FC = () => {
   const { muted: sttMute, status: sttStatus } = useSnapshot(window.ApiServer.stt.serviceState);
   const { muteSoundEffects: vfxMute, showLogs } = useSnapshot(window.ApiServer.state);
   const { status: ttsStatus } = useSnapshot(window.ApiServer.tts.serviceState);
-  const { status: translationStatus } = useSnapshot(window.ApiServer.translation.serviceState);
 
   const { showActionButton: sttButton } = useSnapshot(window.ApiServer.state.services.stt);
   const { showActionButton: ttsButton } = useSnapshot(window.ApiServer.state.services.tts);
-  const { showActionButton: translationButton } = useSnapshot(window.ApiServer.state.services.translation);
 
   return <div className="flex flex-none items-center space-x-0 sm:space-x-2">
     {showLogs ? 
@@ -123,7 +115,6 @@ const AppActions: FC = () => {
     {(sttButton || ttsButton) && <Divider />}
     {sttButton && <ButtonService status={sttStatus} tooltip={t('stt.title')} onClick={handleSwitchSTT} ><RiUserVoiceFill /></ButtonService>}
     {ttsButton && <ButtonService status={ttsStatus} tooltip={t('tts.title')} onClick={handleSwitchTTS} ><RiChatVoiceFill /></ButtonService>}
-    {translationButton && <ButtonService status={translationStatus} tooltip={t('transl.title')} onClick={handleSwitchTranslation} ><RiTranslate2 /></ButtonService>}
   </div>
 }
 

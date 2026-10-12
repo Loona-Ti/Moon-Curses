@@ -97,10 +97,9 @@ class ApiServer {
     await this._state.init();
     await window.ApiShared.peer.startServer();
     await this.twitch.init();
-    await this.discord.init();
+    // Discord and Translation tabs were removed from the UI, so these services are no longer started.
     await this.stt.init();
     await this.tts.init();
-    await this.translation.init();
     await this.vrc.init();
     await this.obs.init();
     await this.keyboard.init();
