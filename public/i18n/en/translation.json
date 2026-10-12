@@ -92,7 +92,6 @@
     "local_port": "Server port",
     "local_mic_boost": "Microphone Boost",
     "local_mic_boost_level": "Boost strength",
-    "local_notice_managed": "Curses starts the speech server in the background when you press Start and stops it on Stop. The first start of an engine installs it and can take several minutes. It needs Python 3.10, 3.11 or 3.12 installed.",
     "local_notice_manual": "Curses connects to a speech server you started yourself on this port.",
 
     "deepgram_title": "Deepgram",

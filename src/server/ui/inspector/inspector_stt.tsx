@@ -259,7 +259,7 @@ const LocalServerSettings: FC = () => {
   return <>
     <InputCheckbox label="stt.local_manage" onChange={e => up("manage", e)} value={pr.manage} />
     <InputText label="stt.local_port" value={pr.port} onChange={e => up("port", e.target.value)} />
-    <span className="text-base-content/60 text-xs">{t(pr.manage ? 'stt.local_notice_managed' : 'stt.local_notice_manual')}</span>
+    {!pr.manage && <span className="text-base-content/60 text-xs">{t('stt.local_notice_manual')}</span>}
   </>
 }
 
