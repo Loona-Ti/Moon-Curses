@@ -48,7 +48,7 @@ pub fn build_spec(
                 Step::new(&["install", "torch", "--index-url", "https://download.pytorch.org/whl/cu128"])
                     .with_fallback(&["install", "torch"]),
             );
-            pkgs(&mut steps, &["transformers>=5.13.0", "accelerate"]);
+            pkgs(&mut steps, &["transformers>=5.13.0", "accelerate", "librosa"]);
         }
         _ => unreachable!(),
     }
