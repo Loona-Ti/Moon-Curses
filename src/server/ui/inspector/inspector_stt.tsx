@@ -235,6 +235,21 @@ const nemotronLanguages = [
   { label: "Korean", value: "ko-KR" },
 ];
 
+/** Microphone boost, shown right under the Service selector for the local engines. */
+const MicBoost: FC = () => {
+  const pr = useSnapshot(window.ApiServer.state.services.stt.data.localServer);
+  const up = <K extends keyof STT_State["localServer"]>(key: K, v: STT_State["localServer"][K]) => window.ApiServer.state.services.stt.data.localServer[key] = v;
+
+  return <>
+    <InputCheckbox label="stt.local_mic_boost" onChange={e => up("micBoost", e)} value={pr.micBoost} />
+    {pr.micBoost && <InputSelect label="stt.local_mic_boost_level" value={pr.micBoostLevel} onValueChange={e => up("micBoostLevel", e)} options={[
+      { label: "x2 (+6 dB)", value: "2" },
+      { label: "x4 (+12 dB)", value: "4" },
+      { label: "x8 (+18 dB)", value: "8" },
+    ]} />}
+  </>
+}
+
 /** Settings shared by every local engine: Curses starts the speech server itself. */
 const LocalServerSettings: FC = () => {
   const {t} = useTranslation();
@@ -244,13 +259,6 @@ const LocalServerSettings: FC = () => {
   return <>
     <InputCheckbox label="stt.local_manage" onChange={e => up("manage", e)} value={pr.manage} />
     <InputText label="stt.local_port" value={pr.port} onChange={e => up("port", e.target.value)} />
-    <InputCheckbox label="stt.local_mic_boost" onChange={e => up("micBoost", e)} value={pr.micBoost} />
-    {pr.micBoost && <InputSelect label="stt.local_mic_boost_level" value={pr.micBoostLevel} onValueChange={e => up("micBoostLevel", e)} options={[
-      { label: "x2 (+6 dB)", value: "2" },
-      { label: "x4 (+12 dB)", value: "4" },
-      { label: "x8 (+18 dB)", value: "8" },
-    ]} />}
-    {pr.micBoost && <span className="text-base-content/60 text-xs">{t('stt.local_mic_boost_notice')}</span>}
     <span className="text-base-content/60 text-xs">{t(pr.manage ? 'stt.local_notice_managed' : 'stt.local_notice_manual')}</span>
   </>
 }
@@ -315,6 +323,8 @@ const Inspector_STT: FC = () => {
   const handleStart = (v: boolean) => window.ApiServer.state.services.stt.showActionButton = v;
   const up = <K extends keyof STT_State>(key: K, v: STT_State[K]) => window.ApiServer.patchService("stt", s => s.data[key] = v);
 
+  const isLocalEngine = [STT_Backends.whisper, STT_Backends.parakeet, STT_Backends.nemotron, STT_Backends.vosk, STT_Backends.moonshine].includes(data.data.backend);
+
   const handleShowReplacements = () => {
     NiceModal.show('stt-replacements');
   }
@@ -340,6 +350,7 @@ const Inspector_STT: FC = () => {
           { label: "Moonshine (local)", value: STT_Backends.moonshine }
         ]} label="common.field_service" value={data.data.backend} onValueChange={e => up("backend", e as STT_Backends)} />
 
+        {isLocalEngine && <MicBoost />}
         {data.data.backend === STT_Backends.browser && <Browser />}
         {data.data.backend === STT_Backends.azure && <Azure />}
         {data.data.backend === STT_Backends.deepgram && <Deepgram />}
