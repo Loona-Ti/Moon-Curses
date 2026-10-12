@@ -36,6 +36,7 @@ const themesLight = [
 ]
 
 const themesDark = [
+  'runa',
   'curses',
   'matrix',
   'staffy',

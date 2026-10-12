@@ -20,7 +20,7 @@ const zodServiceSchemaFactory = <Data extends z.ZodDefault<z.AnyZodObject>>(sche
 export const BackendSchema = z.object({
   id: zSafe(z.string(), () => customAlphabet(urlAlphabet, 42)()),
   linkAddress: zSafe(z.string(), ""),
-  clientTheme: zSafe(z.string(), "curses"),
+  clientTheme: zSafe(z.string(), "runa"),
   uiScale: zSafe(z.number(), 1),
   uiLanguage: zSafe(z.string(), "en"),
   showOverlay: zSafe(z.coerce.boolean(), false),
