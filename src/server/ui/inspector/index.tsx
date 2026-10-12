@@ -16,6 +16,7 @@ import Inspector_Scenes                                                         
 import Inspector_Settings                                                         from "./inspector_settings";
 import Inspector_Twitch from "./inspector_twitch";
 import Inspector_OBS from "./inspector_obs";
+import Inspector_Fansly from "./inspector_fansly";
 
 const Inspector: FC<{ path?: InspectorTabPath }> = ({ path }) => {
   const handleCopyError = (err: string) => {
@@ -47,6 +48,7 @@ const Inspector: FC<{ path?: InspectorTabPath }> = ({ path }) => {
         {path?.tab === Services.stt && <Inspector_STT key="stt" />}
         {path?.tab === Services.tts && <Inspector_TTS key="tts" />}
         {path?.tab === "obs" && <Inspector_OBS key="obs" />}
+        {path?.tab === "fansly" && <Inspector_Fansly key="fansly" />}
         {path?.tab === Services.vrc && <Inspector_VRC key="vrc" />}
         {path?.tab === Services.twitch && <Inspector_Twitch key="twitch" />}
         {path?.tab === "settings" && <Inspector_Settings key="settings" />}

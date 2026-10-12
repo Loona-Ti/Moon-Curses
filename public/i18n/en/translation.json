@@ -196,6 +196,9 @@
     "field_fallback_scene": "Fallback_scene",
     "field_map_scenes": "Map scenes"
   },
+  "fansly": {
+    "title": "Fansly"
+  },
   "twitch": {
     "title": "Twitch",
     "btn_logout": "Logout",

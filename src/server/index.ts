@@ -3,6 +3,7 @@ import { InspectorTabPath } from "@/types";
 import { proxy } from "valtio";
 import { BackendState } from "./schema";
 import Service_Discord from "./services/discord";
+import Service_Fansly from "./services/fansly";
 import Service_Keyboard from "./services/keyboard";
 import Service_OBS from "./services/obs";
 import Service_State from "./services/state";
@@ -33,6 +34,7 @@ class ApiServer {
   public readonly discord = new Service_Discord();
   public readonly vrc = new Service_VRC();
   public readonly obs = new Service_OBS();
+  public readonly fansly = new Service_Fansly();
   public readonly keyboard = new Service_Keyboard();
   public readonly sound = new Service_Sound();
 
@@ -102,6 +104,7 @@ class ApiServer {
     await this.tts.init();
     await this.vrc.init();
     await this.obs.init();
+    await this.fansly.init();
     await this.keyboard.init();
     await initI18n(this.state.uiLanguage);
     this.changeTheme(this.state.clientTheme);

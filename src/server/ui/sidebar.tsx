@@ -1,7 +1,7 @@
 import classNames from "classnames";
 import { AnimatePresence, motion } from "framer-motion";
 import { ButtonHTMLAttributes, FC, memo, PropsWithChildren, ReactNode, useEffect, useMemo } from "react";
-import { RiAddFill, RiBrushFill, RiChatVoiceFill, RiFolderMusicFill, RiImageFill, RiMessage2Fill, RiSettings2Fill, RiStackFill, RiUserVoiceFill } from "react-icons/ri";
+import { RiAddFill, RiBrushFill, RiChatVoiceFill, RiFolderMusicFill, RiHeart3Fill, RiImageFill, RiMessage2Fill, RiSettings2Fill, RiStackFill, RiUserVoiceFill } from "react-icons/ri";
 import { TbArrowBarToLeft, TbArrowBarToRight, TbTextResize } from "react-icons/tb";
 import { useSnapshot } from "valtio";
 import { Services } from "../index";
@@ -138,6 +138,7 @@ const Sidebar: FC = memo(() => {
         <div className={classNames("flex flex-col transition-spacing space-y-1", expand ? "pl-2" : "pl-0")}>
           <SideBarButton tab={{ tab: "obs" }} tooltip={t("obs.title")}><SiObsstudio /></SideBarButton>
           <SideBarButton tab={{ tab: Services.twitch }} tooltip={t("twitch.title")}><SiTwitch /></SideBarButton>
+          <SideBarButton tab={{ tab: "fansly" }} tooltip={t("fansly.title")}><RiHeart3Fill /></SideBarButton>
           <SideBarButton tab={{ tab: Services.vrc }} tooltip={t("vrc.title")}><RiMessage2Fill /></SideBarButton>
         </div>
         <SIdebarDivider expand={expand} icon={<RiBrushFill className="flex-none" size={14} />}>{t('main.section_elements')}</SIdebarDivider>

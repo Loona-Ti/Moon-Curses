@@ -1,5 +1,6 @@
 import { customAlphabet, urlAlphabet } from "nanoid";
 import { Service_Discord_Schema } from "./services/discord/schema";
+import { Service_Fansly_Schema } from "./services/fansly/schema";
 import { Service_OBS_Schema } from "./services/obs/schema";
 import { Service_STT_Schema } from "./services/stt/schema";
 import { Service_Translation_Schema } from "./services/translation/schema";
@@ -42,6 +43,7 @@ export const BackendSchema = z.object({
     twitch: zodServiceSchemaFactory(Service_Twitch_Schema).default({}),
     discord: zodServiceSchemaFactory(Service_Discord_Schema).default({}),
     obs: zodServiceSchemaFactory(Service_OBS_Schema).default({}),
+    fansly: zodServiceSchemaFactory(Service_Fansly_Schema).default({}),
   }).default({})
 }).default({});
 export type BackendState = z.infer<typeof BackendSchema>;
